@@ -20,15 +20,23 @@ docker pull ghcr.io/${GITHUB_REPOSITORY,,}:$NEW_TAG
 # Note: In a real production with Docker Compose, we might use 'docker compose up -d --no-deps --scale app=2'
 # But for this assessment's simplicity, we will do a blue-green swap at the container level.
 
+# Detect the network name (it might have a prefix like statuspulse_ depending on the directory)
+NETWORK_NAME=$(docker network ls --format "{{.Name}}" | grep "statuspulse-network" | head -n 1)
+
+if [ -z "$NETWORK_NAME" ]; then
+    echo "Error: statuspulse-network not found. Ensure the stack is running."
+    exit 1
+fi
+
 OLD_CONTAINER=$(docker ps -q --filter "name=statuspulse-app")
 
 echo "Cleaning up any old deployment attempts..."
 docker rm -f "statuspulse-app-new" || true
 
-echo "Starting new container..."
+echo "Starting new container in network: $NETWORK_NAME..."
 docker run -d \
     --name "statuspulse-app-new" \
-    --network statuspulse-network \
+    --network "$NETWORK_NAME" \
     --env-file .env \
     ghcr.io/${GITHUB_REPOSITORY,,}:$NEW_TAG
 
