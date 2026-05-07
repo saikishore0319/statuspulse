@@ -2,6 +2,14 @@
 
 StatusPulse is a lightweight, high-performance status page and health monitoring API. Designed as a "production-in-a-box" solution, it features automated infrastructure, zero-downtime deployment, and proactive monitoring.
 
+## 🔗 Live Links
+- **Production API**: [https://statuspulse1.duckdns.org](https://statuspulse1.duckdns.org)
+- **Swagger Docs**: [https://statuspulse1.duckdns.org/docs](https://statuspulse1.duckdns.org/docs)
+- **Health Endpoint**: [https://statuspulse1.duckdns.org/health](https://statuspulse1.duckdns.org/health)
+- **Monitoring Dashboard**: [http://13.205.54.43:3001/status/statuspulse](http://13.205.54.43:3001/status/statuspulse)
+- **GitHub Repository**: [https://github.com/saikishore0319/statuspulse](https://github.com/saikishore0319/statuspulse)
+- **Container Registry**: [ghcr.io/saikishore0319/statuspulse](https://ghcr.io/saikishore0319/statuspulse)
+
 ## 🏗 Architecture Overview
 
 The system follows a **Hybrid Orchestration** model:
