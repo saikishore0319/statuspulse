@@ -1,36 +1,24 @@
-# StatusPulse Modular Terraform Infrastructure
+# StatusPulse Modular Infrastructure (IaC)
 
-This directory contains modular Infrastructure as Code (IaC) to provision a production-ready AWS environment.
+Modular Terraform configuration to provision a production-ready AWS environment.
 
-## Modular Structure
-- **`modules/vpc`**: Handles VPC, Subnets, Internet Gateway, and Routing.
-- **`modules/security_group`**: Encapsulates firewall rules for the web server.
-- **`modules/ec2`**: Provisions the EC2 instance and Elastic IP.
+## Architecture
+- **VPC Module**: Isolated network, public subnet, and Internet Gateway.
+- **Security Group Module**: Firewall rules for SSH (restricted IP), HTTP, and HTTPS.
+- **EC2 Module**: T2.Medium instance with Elastic IP and Termination Protection.
 
 ## Prerequisites
-1. [Terraform](https://developer.hashicorp.com/terraform/downloads) installed locally.
-2. AWS Credentials configured.
-3. A DuckDNS account (Token and Domain).
+1. Terraform installed.
+2. AWS CLI configured with valid credentials.
 
-## Usage Instructions
-
-1.  **Initialize**: `terraform init`
-2.  **Configure**: Create `terraform.tfvars`:
-    ```hcl
-    key_name       = "your-key"
-    ssh_allowed_ip = "your.ip.addr/32"
-    ```
-3.  **Apply**: `terraform apply`
-
-## DNS Setup (DuckDNS)
-Since we are using DuckDNS, no Route53 resources are provisioned. 
-2. Get your Token and Domain from [duckdns.org](https://www.duckdns.org/).
-2. On your server, add these to your `.env` file:
-   ```env
-   DUCKDNS_DOMAIN=statuspulse1
-   DUCKDNS_TOKEN=your-token
+## Deployment Steps
+1. `terraform init`
+2. Create `terraform.tfvars`:
+   ```hcl
+   key_name       = "your-aws-key"
+   ssh_allowed_ip = "your.home.ip/32"
    ```
-3. Schedule the update script via crontab:
-   ```bash
-   */5 * * * * /home/ubuntu/statuspulse/scripts/update-dns.sh
-   ```
+3. `terraform apply`
+
+## Outputs
+The setup will output the `server_public_ip`. Use this IP for your GitHub Secrets and DNS configuration.

@@ -8,6 +8,12 @@ This directory contains the core FastAPI application for StatusPulse.
 - **Database**: PostgreSQL (via `psycopg2`)
 - **Messaging/Caching**: Redis
 
+## Security Hardening
+The application is built with security as a priority:
+- **Dependencies**: Regularly audited and pinned to secure versions.
+- **Non-Root**: Runs as a dedicated `statuspulse` user to minimize container breakout risks.
+- **Multi-stage**: Final production image contains zero build tools or source noise.
+
 ## API Endpoints
 
 ### Public / Status
@@ -18,18 +24,15 @@ This directory contains the core FastAPI application for StatusPulse.
 ### Services Management
 - `GET /services`: List all monitored services.
 - `POST /services`: Register a new service for monitoring.
-    - Body: `{"name": "string", "url": "string"}`
 
 ### Incident Management
 - `GET /incidents`: List all reported incidents (sorted by newest).
 - `POST /incidents`: Create a new incident.
-    - Body: `{"service_name": "string", "title": "string", "description": "string", "severity": "minor|major|critical"}`
 
 ## Environment Variables
-The application expects the following variables (loaded via Docker Compose or `.env`):
 - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
 - `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD`
 
-## Local Running (without Docker)
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run with Uvicorn: `uvicorn main:app --reload`
+## Local Development
+1. `pip install -r requirements.txt`
+2. `uvicorn main:app --reload --port 8000`

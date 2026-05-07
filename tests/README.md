@@ -1,24 +1,26 @@
 # StatusPulse Integration Tests
 
-This directory contains the automated test suite for verifying the deployment.
+Automated test suite to verify the end-to-end functionality of the StatusPulse stack.
 
 ## `test_integration.sh`
 
-This is a shell-based integration test suite used in the CI/CD pipeline.
+A robust shell-based test suite that validates:
+1. **API Readiness**: Retries until the health endpoint returns a healthy status.
+2. **Core Functionality**: Validates Root, Service management, and Incident reporting endpoints.
+3. **Data Integrity**: Ensures services and incidents are persisted correctly.
+4. **Error Handling**: Verifies correct `409 Conflict` responses for duplicate entries.
 
-### What it tests:
-1. **Connectivity**: Retries until the service is reachable and healthy.
-2. **Root Endpoint**: Verifies the service name and version.
-3. **Service Lifecycle**: Tests creating a service and then listing it to ensure it was persisted.
-4. **Incident Lifecycle**: Tests creating an incident for a service.
-5. **Conflict Handling**: Verifies that the API correctly returns a `409 Conflict` when trying to create a duplicate service.
+## Running Tests
 
-### Running manually:
-You can run these tests against any reachable StatusPulse instance (local or remote):
+### Local / CI Environment
+The tests run automatically in the GitHub Actions CI pipeline against `http://localhost:8000`.
 
+### Production Environment
+You can manually verify your live deployment from any terminal:
 ```bash
-./test_integration.sh http://localhost:8000
+./test_integration.sh https://statuspulse1.duckdns.org
 ```
 
-### CI/CD Integration
-In the `.github/workflows/ci.yml` pipeline, this script is executed after `docker compose up -d` to ensure the live stack is functional before allowing a merge or deployment.
+## Success Criteria
+- All 7 test stages must return a `pass`.
+- The script must exit with status `0`.

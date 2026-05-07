@@ -60,8 +60,22 @@ jobs:
             export GITHUB_REPOSITORY=$REPO_NAME
             ./scripts/deploy.sh ${{ github.sha }}
 
-      - name: Send Notification
+      - name: Send Discord Notification
         if: always()
         run: |
-          echo "Deployment finished with status: ${{ job.status }}"
-          # You would typically use a specialized action here for Slack/Discord
+          if [ -z "${{ secrets.ALERT_WEBHOOK_URL }}" ]; then
+            echo "ALERT_WEBHOOK_URL is missing, skipping notification."
+          else
+            STATUS="${{ job.status }}"
+            COLOR=3066993
+            if [ "$STATUS" = "success" ]; then COLOR=3066993; elif [ "$STATUS" = "failure" ]; then COLOR=15158332; fi
+            
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{
+                "embeds": [{
+                  "title": "Deployment Status: '"$STATUS"'",
+                  "description": "**Repo:** ${{ github.repository }}\n**Commit:** ${{ github.sha }}\n**Actor:** ${{ github.actor }}",
+                  "color": '"$COLOR"'
+                }]
+              }' "${{ secrets.ALERT_WEBHOOK_URL }}"
+          fi
