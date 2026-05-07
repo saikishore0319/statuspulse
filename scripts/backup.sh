@@ -2,7 +2,12 @@
 # Backup Script for StatusPulse PostgreSQL
 set -e
 
-BACKUP_DIR="/home/deploy/backups"
+# Load environment variables if .env exists
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
+
+BACKUP_DIR="/home/ubuntu/backups"
 TIMESTAMP=$(date +'%Y-%m-%d_%H%M%S')
 FILENAME="statuspulse_db_${TIMESTAMP}.sql.gz"
 LOG_FILE="/var/log/statuspulse-backup.log"

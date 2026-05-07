@@ -2,6 +2,11 @@
 # Health Monitor Script for StatusPulse
 set -e
 
+# Load environment variables if .env exists
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
+
 ALERT_WEBHOOK_URL=${ALERT_WEBHOOK_URL:-""}
 LOG_FILE="/var/log/statuspulse-monitor.log"
 DOMAIN=${DOMAIN:-"statuspulse1.duckdns.org"} # Default domain for TLS check

@@ -2,6 +2,11 @@
 # DuckDNS Update Script for StatusPulse
 set -e
 
+# Load environment variables if .env exists
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
+
 # These should be set in your .env file or environment
 DOMAIN=${DUCKDNS_DOMAIN:-""}
 TOKEN=${DUCKDNS_TOKEN:-""}
