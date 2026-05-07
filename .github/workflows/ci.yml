@@ -57,7 +57,10 @@ jobs:
         run: docker compose up -d
 
       - name: Run Integration Tests
-        run: ./tests/test_integration.sh http://localhost:8000 | tee tests/test_output.log
+        run: |
+          echo "Waiting for containers to be ready..."
+          sleep 10
+          ./tests/test_integration.sh http://localhost:8000 | tee tests/test_output.log
 
       - name: Upload Test Results
         if: always()

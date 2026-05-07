@@ -2,9 +2,9 @@ services:
   app:
     build: .
     container_name: statuspulse-app
-    # port 8000 is now internal-only, traffic comes through nginx
-    expose:
-      - "8000"
+    # Map port 8000 for local testing and CI integration tests
+    ports:
+      - "8000:8000"
     env_file:
       - .env
     depends_on:
