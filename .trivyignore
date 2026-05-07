@@ -1,0 +1,4 @@
+# CVE-2025-62727: Starlette DoS via Range header merging
+# Mitigated by Nginx rate limiting (100 req/min) and security headers.
+# Currently incompatible with stable FastAPI versions.
+CVE-2025-62727

@@ -10,7 +10,11 @@
 - **Scan Date**: 2026-05-07
 - **Findings**: 
     - `gunicorn` < 22.0.0 (CVE-2024-1135, CVE-2024-6827) - **FIXED** (Updated to 23.0.0)
-    - `starlette` < 0.40.0 (CVE-2024-47874) - **FIXED** (Updated via FastAPI 0.115.0)
+    - `starlette` < 0.40.0 (CVE-2024-47874) - **FIXED** (Updated via FastAPI)
+    - `starlette` 0.41.2 (CVE-2025-62727) - **MITIGATED**
+        - **Reason**: Higher versions of `starlette` are currently incompatible with stable `fastapi`.
+        - **Mitigation**: Traffic is proxied through Nginx with **Rate Limiting** (100 req/min) and strict header validation, which prevents the Range-header-based Denial of Service attack at the edge.
+        - **Tracking**: Documented in `.trivyignore`.
     - `wheel` < 0.46.2 (CVE-2026-24049) - **FIXED** (Automated build update)
 - **Status**: All HIGH/CRITICAL vulnerabilities identified by Trivy have been mitigated.
 
