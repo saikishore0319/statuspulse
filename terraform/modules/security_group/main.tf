@@ -4,9 +4,17 @@ resource "aws_security_group" "web_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "SSH Access"
+    description = "SSH Access Legacy"
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.ssh_allowed_ip]
+  }
+
+  ingress {
+    description = "SSH Access New"
+    from_port   = 2222
+    to_port     = 2222
     protocol    = "tcp"
     cidr_blocks = [var.ssh_allowed_ip]
   }

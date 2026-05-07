@@ -5,5 +5,10 @@ output "server_public_ip" {
 
 output "ssh_command" {
   description = "Command to SSH into the server"
-  value       = "ssh -i /path/to/your/key.pem ubuntu@${module.ec2.public_ip}"
+  value       = "ssh -p 2222 -i /path/to/your/key.pem ubuntu@${module.ec2.public_ip}"
+}
+
+output "backup_bucket_name" {
+  description = "The name of the S3 bucket created for backups"
+  value       = module.s3.bucket_name
 }

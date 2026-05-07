@@ -32,14 +32,21 @@ ufw allow 80/tcp
 ufw allow 443/tcp
 echo "y" | ufw enable
 
-# 5. Install Docker & Compose
+# 5. Install Docker, Compose & AWS CLI
 if ! command -v docker &> /dev/null; then
-    echo "Installing Docker..."
-    apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+    echo "Installing Docker & AWS CLI..."
+    apt-get install -y apt-transport-https ca-certificates curl software-properties-common unzip
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     apt-get update
     apt-get install -y docker-ce docker-compose-plugin
+    
+    # AWS CLI Installation
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+    rm -rf aws awscliv2.zip
+
     usermod -aG docker deploy
 fi
 

@@ -24,9 +24,15 @@ log_msg "Backup created: ${FILENAME}"
 log_msg "Cleaning up old backups..."
 find "$BACKUP_DIR" -name "statuspulse_db_*.sql.gz" -mtime +7 -delete
 
-# 3. Optional S3 Upload (Placeholder)
-# if [ ! -z "$S3_BUCKET" ]; then
-#     aws s3 cp "${BACKUP_DIR}/${FILENAME}" "s3://${S3_BUCKET}/"
-# fi
+# 3. Optional S3 Upload
+if [ ! -z "$S3_BUCKET" ]; then
+    log_msg "Uploading backup to S3 bucket: ${S3_BUCKET}..."
+    if aws s3 cp "${BACKUP_DIR}/${FILENAME}" "s3://${S3_BUCKET}/"; then
+        log_msg "S3 upload successful."
+    else
+        log_msg "ERROR: S3 upload failed."
+        exit 1
+    fi
+fi
 
 log_msg "Backup process completed."

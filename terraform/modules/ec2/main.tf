@@ -11,6 +11,7 @@ resource "aws_instance" "app_server" {
   }
 
   disable_api_termination = var.enable_termination_protection
+  iam_instance_profile    = var.iam_instance_profile
 
   tags = {
     Name        = "${var.project_name}-server"
