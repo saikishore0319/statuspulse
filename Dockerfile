@@ -4,6 +4,7 @@ FROM python:3.11-slim AS builder
 WORKDIR /build
 
 # Install build dependencies
+# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libc-dev \
@@ -20,6 +21,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install runtime dependencies (libpq for psycopg2)
+# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     curl \
