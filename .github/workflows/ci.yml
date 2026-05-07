@@ -30,6 +30,16 @@ jobs:
         with:
           dockerfile: Dockerfile
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build local image for testing
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: statuspulse-app:latest
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -40,13 +50,10 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build and Start Stack
         run: |
           cp .env.example .env
-          docker compose up -d --build
+          docker compose up -d
 
       - name: Run Integration Tests
         run: ./tests/test_integration.sh http://localhost:8000 | tee tests/test_output.log
