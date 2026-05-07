@@ -8,7 +8,7 @@ if [ -z "$NEW_TAG" ]; then
     exit 1
 fi
 
-LOG_FILE="/var/log/statuspulse-deploy.log"
+LOG_FILE="./deploy.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] Starting deployment for tag: $NEW_TAG"
