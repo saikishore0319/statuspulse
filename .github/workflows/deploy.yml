@@ -46,13 +46,17 @@ jobs:
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          REPO_NAME: ${{ github.repository }}
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
+          envs: REPO_NAME
           script: |
             cd /home/${{ secrets.SERVER_USER }}/statuspulse
+            export GITHUB_REPOSITORY=$REPO_NAME
             ./scripts/deploy.sh ${{ github.sha }}
 
       - name: Send Notification
