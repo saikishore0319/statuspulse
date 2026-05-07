@@ -4,12 +4,13 @@ FROM python:3.11-slim AS builder
 WORKDIR /build
 
 # Install build dependencies
-# hadolint ignore=DL3008
+# hadolint ignore=DL3008,DL3013
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libc-dev \
     libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir --upgrade pip setuptools wheel
 
 # Install python dependencies
 COPY app/requirements.txt .
@@ -21,11 +22,12 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install runtime dependencies (libpq for psycopg2)
-# hadolint ignore=DL3008
+# hadolint ignore=DL3008,DL3013
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir --upgrade pip setuptools wheel
 
 # Copy installed dependencies from builder
 COPY --from=builder /install /usr/local

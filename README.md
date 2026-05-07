@@ -32,10 +32,21 @@ graph TD
 - **Orchestration**: Full stack management with Docker Compose.
 
 ### 🔄 CI/CD Pipeline (Phase 2)
-- **Linting**: Automated Python linting with `ruff`.
-- **Security Scans**: Dockerfile linting with `hadolint` and vulnerability scanning with `Trivy`.
-- **Automated Testing**: Integration tests run in a live environment on every push.
-- **Auto-Deploy**: Continuous Deployment to production via GHCR and SSH.
+The project uses GitHub Actions for an automated, secure delivery pipeline:
+
+#### 1. CI Pipeline (`ci.yml`)
+Runs on every push or PR to `main`:
+- **Linting**: Uses `ruff` for Python and `hadolint` for Dockerfile best practices.
+- **Security Scanning**: Performs a `Trivy` scan on the built image to identify HIGH/CRITICAL vulnerabilities.
+- **Integration Testing**: Starts the full stack (App + DB + Redis) via Docker Compose and runs a shell-based test suite (`tests/test_integration.sh`) to verify API endpoints.
+- **Artifacts**: Uploads test logs as GitHub artifacts for debugging.
+
+#### 2. CD Pipeline (`deploy.yml`)
+Runs on push to `main` (after CI passes):
+- **Build & Push**: Builds the production image and pushes it to **GitHub Container Registry (GHCR)** with tags for the commit `SHA` and `latest`.
+- **Zero-Downtime Deploy**: SSHes into the EC2 instance and executes `scripts/deploy.sh`.
+- **Health-Check Rollback**: If the new container fails its health check, the deployment script automatically rolls back to the previous stable version.
+- **Notifications**: Sends status updates to Discord/Slack webhooks.
 
 ### 🌐 Live Deployment & Security (Phase 3 & 6)
 - **Zero-Downtime**: Blue-green deployment strategy with health-check-based rollbacks.

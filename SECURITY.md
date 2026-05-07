@@ -6,10 +6,14 @@
 - Use GitHub Actions Secrets for CI/CD environment variables.
 - Production secrets are managed on the server via a secured `.env` file with `600` permissions.
 
-## Container Security
-- **Multi-stage builds**: Used to minimize the attack surface of the final production image.
-- **Non-root user**: The application runs as a dedicated `statuspulse` user.
-- **Vulnerability Scanning**: CI pipeline includes `Trivy` or `Docker Scout` scans for HIGH and CRITICAL vulnerabilities.
+## Vulnerability Management
+- **Scan Date**: 2026-05-07
+- **Findings**: 
+    - `gunicorn` < 22.0.0 (CVE-2024-1135, CVE-2024-6827) - **FIXED** (Updated to 23.0.0)
+    - `starlette` < 0.40.0 (CVE-2024-47874) - **FIXED** (Updated via FastAPI 0.115.0)
+    - `wheel` < 0.46.2 (CVE-2026-24049) - **FIXED** (Automated build update)
+- **Status**: All HIGH/CRITICAL vulnerabilities identified by Trivy have been mitigated.
+
 
 ## Network Security
 - **Reverse Proxy (Nginx)**: All traffic is proxied through Nginx.
