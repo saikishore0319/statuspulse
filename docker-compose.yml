@@ -35,7 +35,6 @@ services:
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      # Placeholder for SSL certs (Task 3b)
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       app:
