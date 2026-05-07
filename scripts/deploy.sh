@@ -22,6 +22,9 @@ docker pull ghcr.io/${GITHUB_REPOSITORY,,}:$NEW_TAG
 
 OLD_CONTAINER=$(docker ps -q --filter "name=statuspulse-app")
 
+echo "Cleaning up any old deployment attempts..."
+docker rm -f "statuspulse-app-new" || true
+
 echo "Starting new container..."
 docker run -d \
     --name "statuspulse-app-new" \
